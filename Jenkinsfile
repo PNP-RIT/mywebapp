@@ -38,20 +38,14 @@ pipeline {
 
     post {
         always {
-            node {
-                echo 'Cleaning up workspace...'
-                deleteDir()
-            }
+            echo 'Cleaning up workspace...'
+            deleteDir()
         }
         success {
-            node {
-                echo 'Pipeline succeeded!'
-            }
+            echo 'Pipeline succeeded!'
         }
         failure {
-            node {
-                echo 'Pipeline failed!'
-            }
+            echo 'Pipeline failed!'
         }
     }
 }
