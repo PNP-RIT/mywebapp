@@ -20,7 +20,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${IMAGE_NAME}:latest")
+                    dockerImage = sudo docker.build("${IMAGE_NAME}:latest")
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhubID') {
-                        dockerImage.push()
+                        sudo dockerImage.push()
                     }
                 }
             }
