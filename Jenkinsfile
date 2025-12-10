@@ -43,7 +43,7 @@ pipeline {
         }
     }
 
-    post {
+     post {
         always {
             sh 'echo "This runs always after the pipeline, no steps {} needed"'
         }
