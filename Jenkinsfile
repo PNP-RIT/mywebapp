@@ -2,57 +2,56 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')   // ID from Jenkins
-        DOCKERHUB_USER = "preethinpatil"
-        APP_NAME = "my_webapp"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhubID') // Your Jenkins credentials ID
+        IMAGE_NAME = "preethinpatil/mywebapp"
     }
 
     stages {
-
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 git(
-                    url: 'git@github.com:PNP-RIT/my_webapp.git',
-                    branch: 'main'
+                    url: 'https://github.com/PNP-RIT/mywebapp',
+                    branch: 'main',
+                    credentialsId: 'dockerhubID'
                 )
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh """
-                    docker build -t \$DOCKERHUB_USER/\$APP_NAME:latest .
-                """
+                script {
+                    dockerImage = docker.build("${IMAGE_NAME}:latest")
+                }
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Push to DockerHub') {
             steps {
-                sh """
-                    echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin
-                """
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh """
-                    docker push \$DOCKERHUB_USER/\$APP_NAME:latest
-                """
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhubID') {
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
 
-     post {
+    post {
         always {
-            sh 'echo "This runs always after the pipeline, no steps {} needed"'
+            node {
+                echo 'Cleaning up workspace...'
+                deleteDir()
+            }
         }
         success {
-            sh 'echo "Pipeline succeeded!"'
+            node {
+                echo 'Pipeline succeeded!'
+            }
         }
         failure {
-            sh 'echo "Pipeline failed!"'
+            node {
+                echo 'Pipeline failed!'
+            }
         }
     }
-
 }
