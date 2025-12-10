@@ -44,11 +44,15 @@ pipeline {
     }
 
     post {
-    always {
-        steps {
-            sh 'echo "Post-build step runs here"'
+        always {
+            sh 'echo "This runs always after the pipeline, no steps {} needed"'
+        }
+        success {
+            sh 'echo "Pipeline succeeded!"'
+        }
+        failure {
+            sh 'echo "Pipeline failed!"'
         }
     }
-}
 
 }
