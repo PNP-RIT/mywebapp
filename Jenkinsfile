@@ -44,14 +44,11 @@ pipeline {
     }
 
     post {
-        always {
-            sh "docker logout"
-        }
-        success {
-            echo "Pipeline executed successfully!"
-        }
-        failure {
-            echo "Pipeline failed. Check console logs."
+    always {
+        steps {
+            sh 'echo "Post-build step runs here"'
         }
     }
+}
+
 }
