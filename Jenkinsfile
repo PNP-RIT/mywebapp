@@ -28,17 +28,15 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    withDockerRegistry([ credentialsId: 'dockerID', url: 'https://index.docker.io/v1/' ]) {
-                    sh "docker push preethinpatil/my_webapp:latest"
-                        }
-
+                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhubID') {
+                        dockerImage.push()
 
                     }
                 }
             }
         }
     
-
+    }
     post {
         always {
             echo 'Cleaning up workspace...'
