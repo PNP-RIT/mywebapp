@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerID') // Your Jenkins credentials ID
-        IMAGE_NAME = "preethinpatil/my_webapp"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhubID') // Your Jenkins credentials ID
+        IMAGE_NAME = "preethinpatil/mywebapp"
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
                 git(
                     url: 'https://github.com/PNP-RIT/mywebapp',
                     branch: 'main',
-                    credentialsId: 'dockerID'
+                    credentialsId: 'dockerhubID'
                 )
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                     docker.withRegistry('https://index.docker.io/v1/', 'dockerID') {
+                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhubID') {
                         dockerImage.push()
 
                     }
