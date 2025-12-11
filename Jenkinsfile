@@ -28,8 +28,10 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerID') {
-                        dockerImage.push()
+                    withDockerRegistry([ credentialsId: 'dockerID', url: 'https://index.docker.io/v1/' ]) {
+                    sh "docker push preethinpatil/my_webapp:latest"
+                        }
+
 
                     }
                 }
