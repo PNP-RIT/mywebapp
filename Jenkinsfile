@@ -12,7 +12,7 @@ pipeline {
                 git(
                     url: 'https://github.com/PNP-RIT/mywebapp',
                     branch: 'main',
-                    credentialsId: 'dockerhubID'
+                    credentialsId: 'dockerID'
                 )
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhubID') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerID') {
                         dockerImage.push()
                     }
                 }
